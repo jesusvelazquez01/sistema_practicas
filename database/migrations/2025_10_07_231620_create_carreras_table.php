@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('salas', function (Blueprint $table) {
+        Schema::create('carreras', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->enum('disponibilidad', ['Libre', 'Ocupada', 'En Mantenimiento'])->default('Libre');
+            $table->enum('turno', ['Mañana', 'Tarde', 'Noche']);
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('salas');
+        Schema::dropIfExists('carreras');
     }
 };
