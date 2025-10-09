@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\SalaController;
+use App\Http\Controllers\CarreraController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -12,6 +14,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+//Aca vamos a listar todas las rutas de nuestra app o sistema
+//por ejemplo el codigo Route::resource me da los 5 metodos basicos de un crud
+Route::resource('salas', SalaController::class);
+Route::resource('carreras',CarreraController::class);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

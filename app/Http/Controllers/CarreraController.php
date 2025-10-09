@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Carrera;
+use Inertia\Inertia;
 
 class CarreraController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+            $carreras = Carrera::paginate(10);
+            return Inertia::render('Carreras/Index',[
+                'carreras' => $carreras
+            ]);
     }
 
     /**
