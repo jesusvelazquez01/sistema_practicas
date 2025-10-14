@@ -57,7 +57,9 @@ class SalaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('Salas/Edit',[
+            'sala' => Sala::find($id)
+        ]);
     }
 
     /**

@@ -21,7 +21,7 @@ class CarreraController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Carreras/Create');
     }
 
     /**
@@ -45,7 +45,9 @@ class CarreraController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('Carreras/Edit',[
+            'carrera' => Carrera::find($id)
+        ]);
     }
 
     /**
