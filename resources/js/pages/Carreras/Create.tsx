@@ -12,6 +12,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         title: 'Carreras',
         href: '/Carreras',
     },
+     {
+        title: 'Crear',
+        href: '',
+    },
 ];
 
 export default function Index() {

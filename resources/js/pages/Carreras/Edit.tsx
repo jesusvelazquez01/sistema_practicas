@@ -9,9 +9,14 @@ import { Head} from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Editar Carreras',
+        title: 'Carreras',
         href: '/Carreras',
     },
+     {
+        title: 'Editar Carrera',
+        href: '',
+    },
+    
 ];
 
 export default function Index() {
