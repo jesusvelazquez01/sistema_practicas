@@ -35,10 +35,31 @@ import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
+import salas from '@/routes/salas';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
+        href: '/dashboard',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Salas',
+        href: salas.index.url(),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Reservas',
+        href: dashboard(),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Docentes',
+        href: dashboard(),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Elementos',
         href: dashboard(),
         icon: LayoutGrid,
     },
@@ -89,7 +110,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 className="flex h-full w-64 flex-col items-stretch justify-between bg-sidebar"
                             >
                                 <SheetTitle className="sr-only">
-                                    Navigation Menu
+                                    Menu de Navegación
                                 </SheetTitle>
                                 <SheetHeader className="flex justify-start text-left">
                                     <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />

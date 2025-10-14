@@ -18,6 +18,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //por ejemplo el codigo Route::resource me da los 5 metodos basicos de un crud
 Route::resource('salas', SalaController::class);
 Route::resource('carreras',CarreraController::class);
-
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

@@ -41,3 +41,13 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+//Crear Interfaces del Proyecto
+export interface Docente {
+    id: number;
+    nombre: string;
+    apellido: string;
+    email: string;
+    telefono: string;
+    created_at: string;
+    updated_at: string;
+}
