@@ -51,3 +51,11 @@ export interface Docente {
     created_at: string;
     updated_at: string;
 }
+export type Disponibilidad = 'Libre' | 'Ocupada' | 'En Mantenimiento';
+export interface Sala {
+    id: number;
+    nombre: string;
+    disponibilidad: Disponibilidad;
+    created_at: string;
+    updated_at: string;
+}

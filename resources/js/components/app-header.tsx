@@ -32,7 +32,7 @@ import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Menu, Search,DoorOpen,TicketPlus,User,LaptopMinimal} from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import salas from '@/routes/salas';
@@ -40,28 +40,28 @@ import salas from '@/routes/salas';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: dashboard(),
         icon: LayoutGrid,
     },
     {
         title: 'Salas',
         href: salas.index.url(),
-        icon: LayoutGrid,
+        icon: DoorOpen,
     },
     {
         title: 'Reservas',
         href: dashboard(),
-        icon: LayoutGrid,
+        icon: TicketPlus,
     },
     {
         title: 'Docentes',
         href: dashboard(),
-        icon: LayoutGrid,
+        icon: User,
     },
     {
         title: 'Elementos',
         href: dashboard(),
-        icon: LayoutGrid,
+        icon: LaptopMinimal,
     },
 ];
 
@@ -173,7 +173,6 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         <AppLogo />
                     </Link>
 
-                    {/* Desktop Navigation */}
                     <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
                         <NavigationMenu className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">

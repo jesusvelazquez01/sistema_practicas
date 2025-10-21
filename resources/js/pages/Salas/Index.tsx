@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/app-layout';
 import {  type BreadcrumbItem } from '@/types';
 import salas from '@/routes/salas';
-import { Head, Link} from '@inertiajs/react';
+import { Head, Link, usePage} from '@inertiajs/react';
 
 
 
@@ -14,7 +14,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-  
+    //esto me trae los datos del conmtroller cuando ibamos a 'salas' => $salas 
+    //entonces me esta trayendo estos datos de la base de datos 
+
+  const {sala} = usePage().props
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -24,6 +27,16 @@ export default function Index() {
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Crear Sala
                 </button>
+                <ol>
+                    {sala.data.map((sala) => (
+                        <li key={sala.id}>
+                            {sala.nombre}
+                        </li>
+                    ))}
+                    <li>
+
+                    </li>
+                </ol>
              </Link>   
             </div>
         </AppLayout>
