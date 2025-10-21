@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sala;
+use Dotenv\Exception\ValidationException;
 use Inertia\Inertia;
 class SalaController extends Controller
 {
@@ -20,7 +21,7 @@ class SalaController extends Controller
         //O puede ser de 5 en 5 o como lo deees vos entonces esto se pasa al componente para mostralos ahi
         $salas = Sala::paginate(10);
         return Inertia::render('Salas/Index',[
-            'salas' => $salas
+            'sala' => $salas
         ]);
         //Cabe recalcar que nosotros debemos crear las carpetas dentro de este directorio
         //Vean como ejemplo la carpeta "Salas" y dentro de ella el archivo "Index.tsx"
@@ -33,6 +34,7 @@ class SalaController extends Controller
      */
     public function create()
     {
+        //Aca no hay mucha ciencia lo que se hace es basicamente renderizar el componente create.tsx cuando se va a la ruta de /create
         return Inertia::render('Salas/Create');
     }
 
@@ -41,7 +43,31 @@ class SalaController extends Controller
      */
     public function store(Request $request)
     {
+        //Se crea un bloque try catch para el buen manejo de excepciones y por buenas practicas de programacion
+        //primeramente se crea una variable validated => despues como viene por parametro los datos del formulario
+        //
+       try{
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:150',
+            'disponibilidad' => 'required',
+        ],[
+            'nombre' => 'El nombre es requerido',
+            'disponibilidad' => 'La disponibilidad es requerida'
+        ]);
+        //Acá ya pasados los datos y haberse validado pasan recien a crearse
+        Sala::create($validated);
+        //Aca lo que se hace es redireccionar
+        return redirect()
+        //A la ruta de salas.index
+        ->route('salas.index')
+        //Despues se muestra un mensaje flash con el mensaje de creación
+        ->with('success', 'Sala creada exitosamente');
         
+       }catch(ValidationException $e){
+        return redirect()
+        ->back()
+        ->with('error','No se pudo dar de alta la sala');
+       } 
     }
 
     /**
@@ -57,24 +83,45 @@ class SalaController extends Controller
      */
     public function edit(string $id)
     {
+        //Aca lo que se hace es basicamente renderizar la vista de edit con el dato de la sala
+        $sala = Sala::findOrFail($id);
         return Inertia::render('Salas/Edit',[
-            'sala' => Sala::find($id)
+            'sala' => $sala
         ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Sala $sala)
     {
-        //
+        //Idem al anterior aca lo que se hace es traer los datos de la sala que se elecciona
+        //tambien traemos el modelo para poder despues actualizarlo
+        try{
+            //Aca es donde se hace lo de la validacion
+            $request->validate([
+                'nombre' => 'required|string|max:150',
+                'disponibilidad' => 'required',
+            ],[
+                //Aca es para que se muestren en español cuando dejemos vacio el campo y le demos a guardar tiene que aparecer
+                //el nombre es requerido
+                'nombre' => 'El nombre es requerido',
+                'disponibilidad' => 'La disponibilidad es requerida'
+            ]);
+            //Una vez validado se actualiza con el metodo update
+            $sala->update($request->all());
+        }catch(ValidationException $e){
+            return redirect()
+            //bueno aca se duelve si hubo algun error en el formulario 
+            ->back()
+            ->withErrors($e)
+            ->withInput()
+            ->with('warning', 'Corrige los errores del formulario.');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    public function destroy(Sala $sala)
     {
-        //
+        $sala->delete();
+        return redirect()
+        ->route('salas.index')
+        ->with('success', 'Sala eliminada exitosamente');
     }
 }
