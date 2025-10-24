@@ -12,7 +12,7 @@ class CarreraController extends Controller
     {
             $carreras = Carrera::paginate(10);
             return Inertia::render('Carreras/Index',[
-                'carreras' => $carreras
+                'carrera' => $carreras
             ]);
     }
 
@@ -29,7 +29,7 @@ class CarreraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

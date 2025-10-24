@@ -19,7 +19,7 @@ class SalaController extends Controller
         //en la carpeta resources->js->pages
         //Paginate es un metodo de Inertia que nos va ayudar a traer los datos de 10 en 10
         //O puede ser de 5 en 5 o como lo deees vos entonces esto se pasa al componente para mostralos ahi
-        $salas = Sala::paginate(10);
+        $salas = Sala::paginate(5);
         return Inertia::render('Salas/Index',[
             'sala' => $salas
         ]);
@@ -106,6 +106,7 @@ class SalaController extends Controller
             ]);
             //Una vez validado se actualiza con el metodo update
             $sala->update($request->all());
+            
         }catch(ValidationException $e){
             return redirect()
             //bueno aca se duelve si hubo algun error en el formulario 

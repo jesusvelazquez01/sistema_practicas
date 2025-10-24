@@ -10,7 +10,7 @@ import { Head, router, useForm} from '@inertiajs/react';
 import { CheckCircle2, Loader2, Plus } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useState } from 'react';
-import SalaController from '@/actions/App/Http/Controllers/SalaController';
+import salas from '@/routes/salas';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -36,24 +36,28 @@ export default function Create() {
     'nombre': '',
     'disponibilidad': '',
   });
+  //Este es para poder mostrar el cartel si hay algun dato cargado, se activa para mostrar
  const [mostrarCartelCancelar,setMostrarCartelCancelar]= useState(false);
 
    
     const handleSubmit = (e: React.FormEvent) => {
 
         e.preventDefault();
-        post(SalaController.store().url);
+        post(salas.store().url);
     };
 
     const handleCancel = () => {
+      //Aca este if dice, si hay algun nombre o disponibilidad cargado en el evento del handleCancel, mostra el cartel
+      //por eso es que dice setMostrarCartelCancelar(true)
         if (data.nombre || data.disponibilidad) {
             setMostrarCartelCancelar(true);
         } else {
-            router.visit(SalaController.index().url);
+          //Si no hay nada directamente cuando le doy clic al boton cancelar voy directamente a salas.index
+            router.visit(salas.index().url);
         }
     };
     const confirmCancel = () => {
-            router.visit(SalaController.index().url);
+            router.visit(salas.index().url);
         };
     return (
         //AppLayout se encarga de basicamente de decirle que todo el contenido va a estar dentro del marco del header 

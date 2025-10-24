@@ -36,6 +36,8 @@ import { BookOpen, Folder, LayoutGrid, Menu, Search,DoorOpen,TicketPlus,User,Lap
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import salas from '@/routes/salas';
+import docentes from '@/routes/docentes'
+import carreras from '@/routes/carreras'
 
 const mainNavItems: NavItem[] = [
     {
@@ -55,14 +57,20 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Docentes',
-        href: dashboard(),
+        href: docentes.index.url(),
         icon: User,
+    },
+        {
+        title: 'Carreras',
+        href: carreras.index.url(),
+        icon: LaptopMinimal,
     },
     {
         title: 'Elementos',
         href: dashboard(),
         icon: LaptopMinimal,
     },
+    
 ];
 
 const rightNavItems: NavItem[] = [

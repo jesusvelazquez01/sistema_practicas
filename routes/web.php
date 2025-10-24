@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\CarreraController;
+use App\Http\Controllers\DocenteController;
+use App\Models\Docente;
 
 Route::get('/', function () {
     return Inertia::render('auth/login');
@@ -18,5 +20,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //por ejemplo el codigo Route::resource me da los 5 metodos basicos de un crud
 Route::resource('salas', SalaController::class);
 Route::resource('carreras',CarreraController::class);
+Route::resource('docentes',DocenteController::class);
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

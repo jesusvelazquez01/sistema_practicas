@@ -11,4 +11,5 @@ class Sala extends Model
         'nombre',
         'disponibilidad',
     ];
+    
 }
