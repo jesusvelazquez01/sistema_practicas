@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, PlusCircle } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import elementos from '@/routes/elementos';
 import { type BreadcrumbItem } from '@/types';
 
@@ -17,27 +17,28 @@ export default function Create() {
     const { data, setData, post, processing, errors, reset } = useForm({
         nombre: '',
         marca: '',
-        cantidad: '',
+        cantidad: 0,
         estado: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(elementos.store.url(), {
+            preserveScroll: true,
             onSuccess: () => reset(),
         });
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Crear Elemento" />
+            <Head title="Registrar Elemento" />
 
             <div className="min-h-screen bg-gradient-to-br p-3">
                 <div className="max-w-3xl mx-auto space-y-6">
                     {/* Encabezado */}
                     <div className="flex items-center justify-between">
                         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                            Crear Nuevo Elemento
+                            Registrar Nuevo Elemento
                         </h1>
                         <Link href={elementos.index.url()}>
                             <Button variant="outline" className="gap-2">
@@ -50,7 +51,7 @@ export default function Create() {
                     <Card className="shadow-lg border-2 dark:border-blue-900">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-blue-400">
-                                <PlusCircle className="h-5 w-5" />
+                                <Plus className="h-5 w-5" />
                                 Nuevo Elemento
                             </CardTitle>
                         </CardHeader>
@@ -62,9 +63,9 @@ export default function Create() {
                                     <Label htmlFor="nombre">Nombre</Label>
                                     <Input
                                         id="nombre"
+                                        placeholder="Ej: Notebook"
                                         value={data.nombre}
                                         onChange={(e) => setData('nombre', e.target.value)}
-                                        placeholder="Ej: Computadora"
                                     />
                                     {errors.nombre && (
                                         <p className="text-red-500 text-sm mt-1">{errors.nombre}</p>
@@ -76,9 +77,9 @@ export default function Create() {
                                     <Label htmlFor="marca">Marca</Label>
                                     <Input
                                         id="marca"
+                                        placeholder="Ej: Samsung"
                                         value={data.marca}
                                         onChange={(e) => setData('marca', e.target.value)}
-                                        placeholder="Ej: Lenovo"
                                     />
                                     {errors.marca && (
                                         <p className="text-red-500 text-sm mt-1">{errors.marca}</p>
@@ -91,9 +92,20 @@ export default function Create() {
                                     <Input
                                         id="cantidad"
                                         type="number"
+                                        placeholder="Ejemplo: 5"
+                                        min={0}
                                         value={data.cantidad}
-                                        onChange={(e) => setData('cantidad', e.target.value)}
-                                        placeholder="Ej: 10"
+                                        onChange={(e) => {
+                                            let value = e.target.value;
+
+                                            // Evita negativos o texto inválido
+                                            if (value.includes('-')) value = value.replace('-', '');
+                                            const numericValue = Math.max(0, Number(value) || 0);
+                                            setData('cantidad', numericValue);
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (['-', 'e', 'E', '+'].includes(e.key)) e.preventDefault();
+                                        }}
                                     />
                                     {errors.cantidad && (
                                         <p className="text-red-500 text-sm mt-1">{errors.cantidad}</p>
@@ -105,9 +117,9 @@ export default function Create() {
                                     <Label htmlFor="estado">Estado</Label>
                                     <Input
                                         id="estado"
+                                        placeholder="Ej: Disponible/En reparación..."
                                         value={data.estado}
                                         onChange={(e) => setData('estado', e.target.value)}
-                                        placeholder="Ej: Disponible / En reparación"
                                     />
                                     {errors.estado && (
                                         <p className="text-red-500 text-sm mt-1">{errors.estado}</p>

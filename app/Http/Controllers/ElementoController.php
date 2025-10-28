@@ -30,7 +30,7 @@ class ElementoController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'marca' => 'required|string|max:255',
-            'cantidad' => 'required|integer',
+            'cantidad' => 'required|integer|min:0',
             'estado' => 'required|string|max:255',
         ]);
 

@@ -1,12 +1,21 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, Link, usePage } from '@inertiajs/react';
+import { Head, useForm, Link, router, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Save } from 'lucide-react';
 import elementos from '@/routes/elementos';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type PageProps } from '@/types';
+
+// ✅ Definimos el tipo de Elemento
+interface Elemento {
+    idelementos: number;
+    nombre: string;
+    marca: string;
+    cantidad: number;
+    estado: string;
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Elementos', href: '/elementos' },
@@ -14,21 +23,24 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Edit() {
-    // Datos recibidos desde Inertia (controlador)
-    const { elemento } = usePage().props as { elemento: any };
+    // ✅ Tipamos correctamente el props recibido desde Inertia
+    const { elemento } = usePage<PageProps<{ elemento: Elemento }>>().props;
 
     // useForm con datos iniciales
     const { data, setData, put, processing, errors, reset } = useForm({
-        nombre: elemento.nombre || '',
-        marca: elemento.marca || '',
-        cantidad: elemento.cantidad || '',
-        estado: elemento.estado || '',
+        nombre: elemento.nombre,
+        marca: elemento.marca,
+        cantidad: elemento.cantidad,
+        estado: elemento.estado,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(elementos.update(elemento.idelementos).url(), {
+        put(elementos.update.url(elemento.idelementos), {
             preserveScroll: true,
+            onSuccess: () => {
+                router.visit(elementos.index.url());
+            },
         });
     };
 
@@ -36,7 +48,7 @@ export default function Edit() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Editar Elemento: ${elemento.nombre}`} />
 
-            <div className="min-h-screen bg-gradient-to-br p-3">
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
                 <div className="max-w-3xl mx-auto space-y-6">
                     {/* Encabezado */}
                     <div className="flex items-center justify-between">
@@ -51,9 +63,9 @@ export default function Edit() {
                     </div>
 
                     {/* Tarjeta principal */}
-                    <Card className="shadow-lg border-2 dark:border-blue-900">
+                    <Card className="shadow-lg border-2 border-blue-100 dark:border-blue-900">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-blue-400">
+                            <CardTitle className="flex items-center gap-2 text-blue-500">
                                 <Save className="h-5 w-5" />
                                 Actualizar Datos
                             </CardTitle>
@@ -93,8 +105,12 @@ export default function Edit() {
                                     <Input
                                         id="cantidad"
                                         type="number"
+                                        min={0}
                                         value={data.cantidad}
-                                        onChange={(e) => setData('cantidad', e.target.value)}
+                                        onChange={(e) => {
+                                            const value = Number(e.target.value);
+                                            setData('cantidad', value < 0 ? 0 : value);
+                                        }}
                                     />
                                     {errors.cantidad && (
                                         <p className="text-red-500 text-sm mt-1">{errors.cantidad}</p>
@@ -120,6 +136,7 @@ export default function Edit() {
                                         type="button"
                                         variant="outline"
                                         onClick={() => reset()}
+                                        disabled={processing}
                                     >
                                         Revertir cambios
                                     </Button>
