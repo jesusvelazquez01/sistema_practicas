@@ -38,6 +38,7 @@ import AppLogoIcon from './app-logo-icon';
 import salas from '@/routes/salas';
 import docentes from '@/routes/docentes'
 import carreras from '@/routes/carreras'
+import elementos from '@/routes/elementos'
 
 const mainNavItems: NavItem[] = [
     {
@@ -67,7 +68,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Elementos',
-        href: dashboard(),
+        href: elementos.index.url(),
         icon: LaptopMinimal,
     },
     
