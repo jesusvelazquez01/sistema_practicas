@@ -77,19 +77,18 @@ export default function Create() {
           </p>
         </div>
 
-        {/* Card principal */}
-        <Card className="shadow-lg border-2 border-orange-100 dark:border-blue-900">
-          <CardHeader className="bg-gradient-to-r">
-            <CardTitle className="flex items-center gap-2 text-blue-400">
-              <CheckCircle2 className="h-5 w-5 text-blue-400" />
-              Información de la Sala
-            </CardTitle>
-            <CardDescription>
-              Completa los campos para poder dar de alta una nueva sala.
-            </CardDescription>
-          </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <Card className="shadow-lg border-2 border-orange-100 dark:border-blue-900">
+            <CardHeader className="bg-gradient-to-r">
+              <CardTitle className="flex items-center gap-2 text-blue-400">
+                <CheckCircle2 className="h-5 w-5 text-blue-400" />
+                Información de la Sala
+              </CardTitle>
+              <CardDescription>
+                Completa los campos para poder dar de alta una nueva sala.
+              </CardDescription>
+            </CardHeader>
 
-          
             <CardContent className="space-y-6 pt-6">
               {/* Nombre */}
               <div className="space-y-2">
@@ -109,74 +108,70 @@ export default function Create() {
                 )}
               </div>
               
+              <div className="space-y-2">
+                <Label htmlFor="disponibilidad">Área</Label>
+                <Select
+                  value={data.disponibilidad}
+                  onValueChange={(value) => setData('disponibilidad', value)}
+                  disabled={processing}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona un área..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {disponibilidad.map((disponibilidad) => (
+                      <SelectItem key={disponibilidad.value} value={disponibilidad.value}>
+                        {disponibilidad.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-              <Label htmlFor="disponibilidad">Área</Label>
-              <Select
-                value={data.disponibilidad}
-                onValueChange={(value) => setData('disponibilidad', value)}
-                disabled={processing}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona un área..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {disponibilidad.map((disponibilidad) => (
-                    <SelectItem key={disponibilidad.value} value={disponibilidad.value}>
-                      {disponibilidad.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-            
-            </CardContent>
-        </Card>
-           {/* Botones de Acción */}
-            <Card className="shadow-lg border-2">
-              <CardContent className="p-6">
-                <div className="flex flex-wrap gap-3 justify-end">
-                   <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleCancel}
-                      className="gap-2  bg-white"
-                    >
-                      Cancelar
-                   </Button>
-                   <AlertDialog open={mostrarCartelCancelar} onOpenChange={setMostrarCartelCancelar}>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Tienes datos sin guardar. ¿Estás seguro de salir sin guardar los cambios?
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Seguir editando</AlertDialogCancel>
-                    <AlertDialogAction onClick={confirmCancel}>
-                      Descartar
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-                  <Button
-                  onClick={handleSubmit}
+              {/* Botones de Acción */}
+              <div className="flex flex-wrap gap-3 justify-end pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="gap-2 bg-white"
+                >
+                  Cancelar
+                </Button>
+                <AlertDialog open={mostrarCartelCancelar} onOpenChange={setMostrarCartelCancelar}>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Tienes datos sin guardar. ¿Estás seguro de salir sin guardar los cambios?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Seguir editando</AlertDialogCancel>
+                      <AlertDialogAction onClick={confirmCancel}>
+                        Descartar
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <Button
                   type="submit"
                   disabled={processing}
-                  className="gap-2 "
+                  className="gap-2"
                 >
-                {processing ? (
-                  <div className="flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Guardando...
-                  </div>
-                ) : (
-                  'Guardar'
-                )}
-              </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  {processing ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Guardando...
+                    </div>
+                  ) : (
+                    'Guardar'
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </form>
       </div>
     </div>
         </AppLayout>

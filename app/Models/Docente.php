@@ -18,4 +18,7 @@ class Docente extends Model
             {
                 return $this->belongsTo(Carrera::class);
             }
+            public function reservas(){
+                return $this->hasMany(Reserva::class);
+            }
 }

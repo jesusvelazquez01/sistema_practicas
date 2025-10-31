@@ -11,5 +11,7 @@ class Sala extends Model
         'nombre',
         'disponibilidad',
     ];
-    
+    public function reservas(){
+        return $this->hasMany(Reserva::class);
+    }
 }

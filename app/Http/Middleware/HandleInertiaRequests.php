@@ -4,6 +4,9 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use App\Models\Sala;
+use App\Models\Reserva;
+use App\Models\Elemento;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -37,7 +40,9 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
-
+        $salas = Sala::count();
+        $reservas = Reserva::count();
+        $elementos = Elemento::count();
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -53,6 +58,9 @@ class HandleInertiaRequests extends Middleware
                 'info' => $request->session()->get('info'),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'salas' => $salas,
+            'reservas' => $reservas,
+            'elementos' => $elementos,
         ];
     }
 }

@@ -4,46 +4,43 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import {  type BreadcrumbItem} from '@/types';
+import {  PageProps, Sala, type BreadcrumbItem} from '@/types';
 import {disponibilidad} from '@/constants/estados';
 import { Head, router, useForm} from '@inertiajs/react';
-import { CheckCircle2, Loader2, Plus } from 'lucide-react';
+import { CheckCircle2, Loader2, Pencil } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useState } from 'react';
 import salas from '@/routes/salas';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+interface Props  {
+  sala: Sala;
+}
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Salas',
         href: '/salas',
     },
     {
-        title: 'Crear',
+        title: 'Editar',
         href: '',
     },
 ];
 
-export default function Edit() {
-  //Bien en react comun sin inertia cada vez que mandamos un dato se esta creando un evento en nuestro componente
-  //cada vez que hacemos esto se usa UseState por ejemplo
-  //tenemos el un formulario de salas con nombre y disponilibidad 
-  //entonces tendriamos que hacer una funcion UseState para nombre y para disponilibidad 
-  //con Inertia hay una funcion que se llama UserForm() que es la que se encarga de los eventos del componente en lo que se refiere a 
-  //formularios
-
-  const {data,setData, post, processing, errors } = useForm({
-    'nombre': '',
-    'disponibilidad': '',
+export default function Edit({ sala }: Props) {
+  // Inicializamos el formulario con los datos de la sala que recibimos como prop
+  const { data, setData, put, processing, errors } = useForm({
+    nombre: sala.nombre || '',
+    disponibilidad: sala.disponibilidad as 'disponible' | 'ocupada' | 'mantenimiento' || 'disponible',
   });
   //Este es para poder mostrar el cartel si hay algun dato cargado, se activa para mostrar
  const [mostrarCartelCancelar,setMostrarCartelCancelar]= useState(false);
 
    
     const handleSubmit = (e: React.FormEvent) => {
-
         e.preventDefault();
-        post(salas.store().url);
+        // Usamos put para actualizar el recurso existente
+        put(salas.update(sala.id).url);
     };
 
     const handleCancel = () => {
@@ -63,18 +60,18 @@ export default function Edit() {
         //AppLayout se encarga de basicamente de decirle que todo el contenido va a estar dentro del marco del header 
         <AppLayout breadcrumbs={breadcrumbs}>
             {/* Header es el titulo de la pagina  */}
-            <Head title="Crear Sala" />
+            <Head title="Editar Sala" />
              <div className="min-h-screen bg-gradient-to-br p-3">
             <div className="max-w-7xl mx-auto space-y-6">
         {/* Header principal */}
         <div className="text-align-left">
-          <h1 className="text-2xl font-bold bg-gradient-to-r bg-blue-400 bg-clip-text text-transparent flex items-center gap-2">
-            <Plus className="h-5 w-5 text-blue-400" />
-            Alta de Sala
-          </h1>
-          <p className="text-slate-600 dark:text-slate-400">
-            Registra la información de las salas disponibles
-          </p>
+            <h1 className="text-2xl font-bold bg-gradient-to-r bg-blue-400 bg-clip-text text-transparent flex items-center gap-2">
+              <Pencil className="h-5 w-5 text-blue-400" />
+              Editar Sala
+            </h1>
+            <p className="text-slate-600 dark:text-slate-400">
+              Modifica la información de la sala seleccionada
+            </p>
         </div>
 
         {/* Card principal */}
@@ -82,10 +79,10 @@ export default function Edit() {
           <CardHeader className="bg-gradient-to-r">
             <CardTitle className="flex items-center gap-2 text-blue-400">
               <CheckCircle2 className="h-5 w-5 text-blue-400" />
-              Información de la Sala
+              Editar Información de la Sala
             </CardTitle>
             <CardDescription>
-              Completa los campos para poder dar de alta una nueva sala.
+              Modifica los campos necesarios y guarda los cambios.
             </CardDescription>
           </CardHeader>
 
@@ -128,55 +125,51 @@ export default function Edit() {
                 </SelectContent>
               </Select>
 
-            
-            </CardContent>
-        </Card>
-           {/* Botones de Acción */}
-            <Card className="shadow-lg border-2">
-              <CardContent className="p-6">
-                <div className="flex flex-wrap gap-3 justify-end">
-                   <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleCancel}
-                      className="gap-2  bg-white"
-                    >
-                      Cancelar
-                   </Button>
-                   <AlertDialog open={mostrarCartelCancelar} onOpenChange={setMostrarCartelCancelar}>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Tienes datos sin guardar. ¿Estás seguro de salir sin guardar los cambios?
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Seguir editando</AlertDialogCancel>
-                    <AlertDialogAction onClick={confirmCancel}>
-                      Descartar
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-                  <Button
-                  onClick={handleSubmit}
+              {/* Botones de Acción */}
+              <div className="flex flex-wrap gap-3 justify-end pt-6 mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="gap-2 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700"
+                >
+                  Cancelar
+                </Button>
+                
+                <AlertDialog open={mostrarCartelCancelar} onOpenChange={setMostrarCartelCancelar}>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Tienes datos sin guardar. ¿Estás seguro de salir sin guardar los cambios?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Seguir editando</AlertDialogCancel>
+                      <AlertDialogAction onClick={confirmCancel}>
+                        Descartar
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                
+                <Button
                   type="submit"
                   disabled={processing}
-                  className="gap-2 "
+                  className="gap-2 bg-blue-500 dark:bg-blue-500"
                 >
-                {processing ? (
-                  <div className="flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Guardando...
-                  </div>
-                ) : (
-                  'Guardar'
-                )}
-              </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  {processing ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Guardando...
+                    </div>
+                  ) : (
+                    'Guardar cambios'
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+        </Card>
       </div>
     </div>
         </AppLayout>

@@ -6,7 +6,8 @@ use App\Http\Controllers\SalaController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\ElementoController;
-use App\Models\Docente;
+use App\Http\Controllers\ReservaController;
+
 
 Route::get('/', function () {
     return Inertia::render('auth/login');
@@ -14,7 +15,9 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('dashboard',[
+            
+        ]);
     })->name('dashboard');
 });
 //Aca vamos a listar todas las rutas de nuestra app o sistema
@@ -23,5 +26,6 @@ Route::resource('salas', SalaController::class);
 Route::resource('carreras',CarreraController::class);
 Route::resource('docentes',DocenteController::class);
 Route::resource('elementos', ElementoController::class);
+Route::resource('reservas', ReservaController::class);
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

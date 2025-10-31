@@ -67,6 +67,15 @@ export interface Sala {
     created_at: string;
     updated_at: string;
 }
+export interface Elemento{
+    id: number;
+    nombre: string;
+    marca: string;
+    cantidad: number;
+    estado: string;
+    created_at: string;
+    updated_at: string;
+}
 //Para poder usar el datable esto es un copia y pego nomas no hay que tocar nada en esta interfaz
 export interface PaginatedData<T> {
     data: T[];
@@ -81,6 +90,7 @@ export interface PaginatedData<T> {
         label: string;
         active: boolean;
     }>;
+  
 }
 //Para pasar las props a las o los datatables aca vamos a ir agregando las interfaces que nos falten
 //faltaria docentes, elementos mmm carreras y nose cuales mas
@@ -89,4 +99,7 @@ export interface PageProps{
 
 sala : PaginatedData<Sala>;
 carrera : PaginatedData<Carrera>;
+    salas: number;
+    reservas: number;
+    elementos: number; 
 }

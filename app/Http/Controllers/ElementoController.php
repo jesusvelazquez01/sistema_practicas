@@ -12,7 +12,7 @@ class ElementoController extends Controller
     {
         $elementos = Elemento::query()
             ->orderBy('idelementos', 'desc')
-            ->paginate(5) // Se muestra 5 por página
+            ->paginate(5)
             ->onEachSide(1);
 
         return inertia('Elementos/Index', [
@@ -32,6 +32,11 @@ class ElementoController extends Controller
             'marca' => 'required|string|max:255',
             'cantidad' => 'required|integer|min:0',
             'estado' => 'required|string|max:255',
+        ],[
+            'nombre.required' => 'El nombre es obligatorio.',
+            'marca.required' => 'La marca es obligatoria.',
+            'cantidad.required' => 'La cantidad es obligatoria.',
+            'estado.required' => 'El estado es obligatorio.',
         ]);
 
         Elemento::create($request->all());
@@ -53,6 +58,11 @@ class ElementoController extends Controller
             'marca' => 'required|string|max:255',
             'cantidad' => 'required|integer',
             'estado' => 'required|string|max:255',
+        ],[
+            'nombre.required' => 'El nombre es obligatorio.',
+            'marca.required' => 'La marca es obligatoria.',
+            'cantidad.required' => 'La cantidad es obligatoria.',
+            'estado.required' => 'El estado es obligatorio.',
         ]);
 
         $elemento->update($request->all());

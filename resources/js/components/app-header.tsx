@@ -39,6 +39,7 @@ import salas from '@/routes/salas';
 import docentes from '@/routes/docentes'
 import carreras from '@/routes/carreras'
 import elementos from '@/routes/elementos'
+import reservas from '@/routes/reservas'
 
 const mainNavItems: NavItem[] = [
     {
@@ -53,7 +54,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Reservas',
-        href: dashboard(),
+        href: reservas.index(),
         icon: TicketPlus,
     },
     {

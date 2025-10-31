@@ -108,22 +108,17 @@ export default function Index() {
                     </div>
 
                     <Card className="shadow-lg border-2 dark:border-blue-900">
-                        <CardContent className="p-6">
-                            <Link href={elementos.create.url()}>
-                                <Button className="gap-2 bg-blue-500 hover:bg-blue-600">
-                                    <Plus className="h-4 w-4" />
-                                    Crear Elemento
-                                </Button>
-                            </Link>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="shadow-lg border-2 dark:border-blue-900">
-                        <CardHeader>
+                        <CardHeader className="bg-gradient-to-r flex flex-row items-center justify-between">
                             <CardTitle className="flex items-center gap-2 text-blue-400">
                                 <Package className="h-5 w-5 text-blue-400" />
                                 Lista de Elementos
                             </CardTitle>
+                            <Link href={elementos.create.url()}>
+                                <Button className="gap-2 bg-blue-400 hover:bg-blue-400">
+                                    <Plus className="h-4 w-4" />
+                                    Crear Elemento
+                                </Button>
+                            </Link>
                         </CardHeader>
 
                         <CardContent className="pt-6">

@@ -20,17 +20,7 @@ const sidebarNavItems: NavItem[] = [
         title: 'Contraseña',
         href: editPassword(),
         icon: null,
-    },
-    {
-        title: 'Autenticación 2FA',
-        href: show(),
-        icon: null,
-    },
-    {
-        title: 'Apariencia',
-        href: editAppearance(),
-        icon: null,
-    },
+    }
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {

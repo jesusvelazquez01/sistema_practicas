@@ -111,7 +111,7 @@ export default function Index() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Salas" />
             
-            <div className="min-h-screen bg-gradient-to-br p-3">
+            <div className="min-h-screen  p-3">
                 <div className="max-w-7xl mx-auto space-y-6">
                     
                     {/* Header principal */}
@@ -120,30 +120,27 @@ export default function Index() {
                             <List className="h-5 w-5 text-blue-400" />
                             Gestión de Salas
                         </h1>
-                        <p className="text-slate-600 dark:text-slate-400">
+                        <p className="text-slate-600 ">
                             Administra y visualiza todas las salas disponibles
                         </p>
                     </div>
 
                     {/* Card con botón de crear */}
-                    <Card className="shadow-lg border-2  dark:border-blue-900">
-                        <CardContent className="p-6">
+                    {/* Card principal con la tabla */}
+                    <Card className="shadow-lg border-2 dark:border-blue-300">
+                        <CardHeader className="bg-gradient-to-r flex flex-row items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <DoorOpen className="h-5 w-5 text-blue-400" />
+                                <CardTitle className="text-blue-400">
+                                    Lista de Salas
+                                </CardTitle>
+                            </div>
                             <Link href={salas.create.url()}>
-                                <Button className="gap-2 bg-blue-500 hover:bg-blue-600">
+                                <Button className="gap-2 bg-blue-400">
                                     <Plus className="h-4 w-4" />
                                     Crear Sala
                                 </Button>
                             </Link>
-                        </CardContent>
-                    </Card>
-
-                    {/* Card principal con la tabla */}
-                    <Card className="shadow-lg border-2 dark:border-blue-900">
-                        <CardHeader className="bg-gradient-to-r">
-                            <CardTitle className="flex items-center gap-2 text-blue-400">
-                                <DoorOpen className="h-5 w-5 text-blue-400" />
-                                Lista de Salas
-                            </CardTitle>
                         </CardHeader>
 
                         <CardContent className="pt-6">
