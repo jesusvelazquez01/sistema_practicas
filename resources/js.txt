@@ -1,0 +1,95 @@
+js
+├── app.tsx
+├── components
+│   ├── alert-error.tsx
+│   ├── app-content.tsx
+│   ├── appearance-dropdown.tsx
+│   ├── appearance-tabs.tsx
+│   ├── app-header.tsx
+│   ├── app-logo-icon.tsx
+│   ├── app-logo.tsx
+│   ├── app-shell.tsx
+│   ├── app-sidebar-header.tsx
+│   ├── app-sidebar.tsx
+│   ├── breadcrumbs.tsx
+│   ├── delete-user.tsx
+│   ├── heading-small.tsx
+│   ├── heading.tsx
+│   ├── icon.tsx
+│   ├── input-error.tsx
+│   ├── nav-footer.tsx
+│   ├── nav-main.tsx
+│   ├── nav-user.tsx
+│   ├── text-link.tsx
+│   ├── two-factor-recovery-codes.tsx
+│   ├── two-factor-setup-modal.tsx
+│   ├── ui
+│   │   ├── alert.tsx
+│   │   ├── avatar.tsx
+│   │   ├── badge.tsx
+│   │   ├── breadcrumb.tsx
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── checkbox.tsx
+│   │   ├── collapsible.tsx
+│   │   ├── dialog.tsx
+│   │   ├── dropdown-menu.tsx
+│   │   ├── icon.tsx
+│   │   ├── input-otp.tsx
+│   │   ├── input.tsx
+│   │   ├── label.tsx
+│   │   ├── navigation-menu.tsx
+│   │   ├── placeholder-pattern.tsx
+│   │   ├── select.tsx
+│   │   ├── separator.tsx
+│   │   ├── sheet.tsx
+│   │   ├── sidebar.tsx
+│   │   ├── skeleton.tsx
+│   │   ├── toggle-group.tsx
+│   │   ├── toggle.tsx
+│   │   └── tooltip.tsx
+│   ├── user-info.tsx
+│   └── user-menu-content.tsx
+├── hooks
+│   ├── use-appearance.tsx
+│   ├── use-clipboard.ts
+│   ├── use-initials.tsx
+│   ├── use-mobile-navigation.ts
+│   ├── use-mobile.tsx
+│   └── use-two-factor-auth.ts
+├── layouts
+│   ├── app
+│   │   ├── app-header-layout.tsx
+│   │   └── app-sidebar-layout.tsx
+│   ├── app-layout.tsx
+│   ├── auth
+│   │   ├── auth-card-layout.tsx
+│   │   ├── auth-simple-layout.tsx
+│   │   └── auth-split-layout.tsx
+│   ├── auth-layout.tsx
+│   └── settings
+│       └── layout.tsx
+├── lib
+│   └── utils.ts
+├── pages
+│   ├── auth
+│   │   ├── confirm-password.tsx
+│   │   ├── forgot-password.tsx
+│   │   ├── login.tsx
+│   │   ├── register.tsx
+│   │   ├── reset-password.tsx
+│   │   ├── two-factor-challenge.tsx
+│   │   └── verify-email.tsx
+│   ├── dashboard.tsx
+│   ├── settings
+│   │   ├── appearance.tsx
+│   │   ├── password.tsx
+│   │   ├── profile.tsx
+│   │   └── two-factor.tsx
+│   └── welcome.tsx
+├── ssr.tsx
+└── types
+    ├── index.d.ts
+    └── vite-env.d.ts
+
+12 directories, 80 files
