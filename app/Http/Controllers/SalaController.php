@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sala;
-use Dotenv\Exception\ValidationException;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 class SalaController extends Controller
 {
@@ -51,8 +51,8 @@ class SalaController extends Controller
             'nombre' => 'required|string|max:150',
             'disponibilidad' => 'required',
         ],[
-            'nombre' => 'El nombre es requerido',
-            'disponibilidad' => 'La disponibilidad es requerida'
+            'nombre.required' => 'El nombre es requerido',
+            'disponibilidad.required' => 'La disponibilidad es requerida'
         ]);
         //Acá ya pasados los datos y haberse validado pasan recien a crearse
         Sala::create($validated);
@@ -65,8 +65,10 @@ class SalaController extends Controller
         
        }catch(ValidationException $e){
         return redirect()
-        ->back()
-        ->with('error','No se pudo dar de alta la sala');
+         ->back()
+        ->withErrors($e->errors())
+        ->withInput()
+        ->with('warning', 'Corriga los errores del formulario. ');
        } 
     }
 
@@ -106,7 +108,9 @@ class SalaController extends Controller
             ]);
             //Una vez validado se actualiza con el metodo update
             $sala->update($request->all());
-            
+            return redirect()
+            ->route('salas.index')
+            ->with('success', 'Sala actualizada exitosamente');
         }catch(ValidationException $e){
             return redirect()
             //bueno aca se duelve si hubo algun error en el formulario 

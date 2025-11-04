@@ -52,6 +52,7 @@ export interface Docente {
     updated_at: string;
 }
 export type  Turno = 'Mañana' | 'Tarde' | 'Noche';
+
 export interface Carrera {
     id: number;
     nombre: string;
@@ -102,4 +103,10 @@ carrera : PaginatedData<Carrera>;
     salas: number;
     reservas: number;
     elementos: number; 
+flash: {
+    success: string | null;
+    error: string | null;
+    warning: string | null;
+    info: string | null;
+ }
 }
