@@ -9,6 +9,7 @@ import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import { LoaderCircle } from 'lucide-react';
 
 interface LoginProps {
@@ -24,6 +25,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         >
             <Head title="Iniciar sesión" />
 
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="w-full"
+            >
             <Form
                 {...AuthenticatedSessionController.store.form()}
                 resetOnSuccess={['password']}
@@ -72,15 +79,11 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    tabIndex={3}
-                                />
-                                <Label htmlFor="remember">Recordarme</Label>
-                            </div>
-
+                            <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="w-full"
+                            >
                             <Button
                                 type="submit"
                                 className="mt-4 w-full"
@@ -93,17 +96,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 )}
                                 Iniciar sesión
                             </Button>
-                        </div>
-
-                        <div className="text-center text-sm text-muted-foreground">
-                            ¿No tienes una cuenta?{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                Registrarse
-                            </TextLink>
+                            </motion.div>
                         </div>
                     </>
                 )}
             </Form>
+            </motion.div>
 
             {status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">

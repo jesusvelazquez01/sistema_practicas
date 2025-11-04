@@ -156,7 +156,8 @@ export default function Edit({ sala }: Props) {
                 <Button
                   type="submit"
                   disabled={processing}
-                  className="gap-2 bg-blue-500 dark:bg-blue-500"
+                  onClick={handleSubmit}
+                  className="gap-2 bg-blue-400 dark:bg-blue-400"
                 >
                   {processing ? (
                     <div className="flex items-center gap-2">
@@ -164,7 +165,7 @@ export default function Edit({ sala }: Props) {
                       Guardando...
                     </div>
                   ) : (
-                    'Guardar cambios'
+                    'Guardar'
                   )}
                 </Button>
               </div>

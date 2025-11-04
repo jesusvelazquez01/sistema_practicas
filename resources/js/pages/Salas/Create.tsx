@@ -44,6 +44,7 @@ export default function Create() {
 
         e.preventDefault();
         post(salas.store().url);
+        
     };
 
     const handleCancel = () => {

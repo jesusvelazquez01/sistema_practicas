@@ -38,13 +38,16 @@ class CarreraController extends Controller
                 'nombre.required' => 'El nombre es obligatorio',
                 'turno.required' => 'El turno es obligatorio',
             ]);
-            $carrera = Carrera::create($validated);
-           return redirect()->route('carreras.index')
+        $carrera = Carrera::create($validated);
+           return redirect()
+           ->route('carreras.index')
            ->with('success', 'Carrera creada exitosamente');
         }catch(ValidatedException $e){
             return redirect()
         ->back()
-        ->with('error','No se pudo dar de alta la carrera');
+        ->withErrors($e->errors())
+        ->withInput()
+        ->with('warning','Corriga los errores del formulario.');
         }
     }
 
@@ -62,8 +65,8 @@ class CarreraController extends Controller
     public function edit(string $id)
     {
         $carrera = Carrera::findOrFail($id);
-        return Inertia::render('Carreras/Edit',[
-            'carrera' => $carrera
+        return Inertia::render('Carreras/Edit', [
+            'carre' => $carrera
         ]);
     }
 
@@ -72,23 +75,33 @@ class CarreraController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        try{
+        $carrera = Carrera::findOrFail($id);
+        
+        try {
             $validated = $request->validate([
                 'nombre' => 'required|string|max:255',
                 'turno' => 'required|string|max:255',
-            ],[
+            ], [
                 'nombre.required' => 'El nombre es obligatorio',
                 'turno.required' => 'El turno es obligatorio',
             ]);
-            $carrera = Carrera::findOrFail($id);
+            
             $carrera->update($validated);
-            return redirect()->route('carreras.index')
-            ->with('success', 'Carrera actualizada exitosamente');
-        }catch(ValidatedException $e){
+            
             return redirect()
-        ->back()
-        ->with('error','No se pudo actualizar la carrera');
+                ->route('carreras.index')
+                ->with('success', 'Carrera actualizada exitosamente');
+                
+        } catch (ValidationException $e) {
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput()
+                ->with('warning', 'Corrige los errores del formulario.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('warning', 'No se pudo actualizar la carrera: ' . $e->getMessage());
         }
     }
 

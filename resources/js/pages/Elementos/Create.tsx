@@ -37,7 +37,7 @@ export default function Create() {
                 <div className="max-w-3xl mx-auto space-y-6">
                     {/* Encabezado */}
                     <div className="flex items-center justify-between">
-                        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                        <h1 className="text-2xl font-bold bg-blue-400 bg-clip-text text-transparent">
                             Registrar Nuevo Elemento
                         </h1>
                         <Link href={elementos.index.url()}>
@@ -137,7 +137,7 @@ export default function Create() {
                                     </Button>
                                     <Button
                                         type="submit"
-                                        className="bg-blue-500 hover:bg-blue-600 text-white"
+                                        className="bg-blue-400 text-white"
                                         disabled={processing}
                                     >
                                         Guardar Elemento

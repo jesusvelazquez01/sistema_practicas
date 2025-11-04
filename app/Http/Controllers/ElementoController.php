@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Elemento;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Validation\ValidationException;
 
 class ElementoController extends Controller
 {
@@ -27,7 +28,8 @@ class ElementoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        try{
+            $request->validate([
             'nombre' => 'required|string|max:255',
             'marca' => 'required|string|max:255',
             'cantidad' => 'required|integer|min:0',
@@ -41,7 +43,17 @@ class ElementoController extends Controller
 
         Elemento::create($request->all());
 
-        return redirect()->route('elementos.index')->with('success', 'Elemento creado correctamente.');
+        return redirect()
+        ->route('elementos.index')
+        ->with('success', 'Elemento creado correctamente.');
+        }catch(ValidationException $e){
+            return redirect()
+            ->back()
+            ->withErrors($e->errors())
+            ->withInput()
+            ->with('warning','Corriga los errores del formulario.');
+        }
+      
     }
 
     public function edit(Elemento $elemento)
