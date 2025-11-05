@@ -80,6 +80,7 @@ class ElementoController extends Controller
         $elemento->update($request->all());
 
         return redirect()->route('elementos.index')->with('success', 'Elemento actualizado correctamente.');
+    
     }
 
     public function destroy(Elemento $elemento)
