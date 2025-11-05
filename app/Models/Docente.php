@@ -10,7 +10,7 @@ class Docente extends Model
         'nombre',
         'apellido',
         'email',
-        'carrera',
+        'carrera_id',
     ];
     //Aca en el modelo de docente le vamos a decir que, muchos docentes pertenecen a una carrera
     //esto se logra con el belongsTo si ? estamos diciendo que muchos docentes pertenecen a una sola carrera
