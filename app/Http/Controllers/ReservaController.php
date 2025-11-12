@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\Sala;
+use App\Models\Reserva;
+use App\Models\Docente;
 
 class ReservaController extends Controller
 {
@@ -32,14 +35,17 @@ class ReservaController extends Controller
             ->get()
             ->map(function($reserva) {
                 // Formatear la fecha y hora para FullCalendar
-                $startDateTime = \Carbon\Carbon::parse($reserva->fecha . ' ' . $reserva->hora_entrada);
-                $endDateTime = \Carbon\Carbon::parse($reserva->fecha . ' ' . $reserva->hora_salida);
+                // Usar formato sin zona horaria para que FullCalendar lo interprete como hora local
+                $start = $reserva->fecha . 'T' . $reserva->hora_entrada;
+                $end = $reserva->fecha . 'T' . $reserva->hora_salida;
                 
                 return [
                     'id' => $reserva->id,
-                    'title' => $reserva->docente ? $reserva->docente->nombre : 'Sin docente',
-                    'start' => $startDateTime->toIso8601String(),
-                    'end' => $endDateTime->toIso8601String(),
+                    'title' => $reserva->docente 
+                        ? "{$reserva->docente->apellido}, {$reserva->docente->nombre}" 
+                        : 'Sin docente',
+                    'start' => $start,
+                    'end' => $end,
                     'sala_id' => $reserva->sala_id,
                     'docente_id' => $reserva->docente_id,
                     'fecha' => $reserva->fecha,
@@ -50,7 +56,7 @@ class ReservaController extends Controller
             });
         
         // Obtener la lista de docentes para el formulario
-        $docentes = \App\Models\Docente::select('id', 'nombre', 'apellido')
+        $docentes = Docente::select('id', 'nombre', 'apellido')
             ->get()
             ->map(fn($docente) => [
                 'value' => $docente->id,
@@ -78,27 +84,43 @@ class ReservaController extends Controller
         ]);
 
         // Verificar disponibilidad de la sala
+        // Una reserva se solapa si:
+        // 1. La nueva hora_entrada está entre una reserva existente (hora_entrada < nueva_entrada < hora_salida)
+        // 2. La nueva hora_salida está entre una reserva existente (hora_entrada < nueva_salida < hora_salida)
+        // 3. La nueva reserva envuelve completamente una existente (nueva_entrada <= existente_entrada Y nueva_salida >= existente_salida)
         $existeReserva = Reserva::where('sala_id', $validated['sala_id'])
             ->where('fecha', $validated['fecha'])
             ->where(function($query) use ($validated) {
-                $query->whereBetween('hora_entrada', [$validated['hora_entrada'], $validated['hora_salida']])
-                      ->orWhereBetween('hora_salida', [$validated['hora_entrada'], $validated['hora_salida']])
-                      ->orWhere(function($q) use ($validated) {
-                          $q->where('hora_entrada', '<=', $validated['hora_entrada'])
-                            ->where('hora_salida', '>=', $validated['hora_salida']);
-                      });
+                // Caso 1: La hora de entrada de la nueva reserva cae dentro de una reserva existente
+                $query->where(function($q) use ($validated) {
+                    $q->where('hora_entrada', '<', $validated['hora_entrada'])
+                      ->where('hora_salida', '>', $validated['hora_entrada']);
+                })
+                // Caso 2: La hora de salida de la nueva reserva cae dentro de una reserva existente
+                ->orWhere(function($q) use ($validated) {
+                    $q->where('hora_entrada', '<', $validated['hora_salida'])
+                      ->where('hora_salida', '>', $validated['hora_salida']);
+                })
+                // Caso 3: La nueva reserva envuelve completamente una reserva existente
+                ->orWhere(function($q) use ($validated) {
+                    $q->where('hora_entrada', '>=', $validated['hora_entrada'])
+                      ->where('hora_salida', '<=', $validated['hora_salida']);
+                });
             })
             ->exists();
 
         if ($existeReserva) {
-            return back()->withErrors([
+            return back()
+            ->withErrors([
                 'hora_entrada' => 'La sala ya está reservada en el horario seleccionado.'
+            
             ]);
         }
 
         $reserva = Reserva::create($validated);
 
-        return redirect()->route('reservas.calendar', ['sala' => $validated['sala_id']])
+        // Redirigir de vuelta a la página de calendario con la sala
+        return redirect()->route('reservas.create', ['sala' => $validated['sala_id']])
             ->with('success', 'Reserva creada exitosamente.');
     }
 
@@ -131,6 +153,11 @@ class ReservaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $reserva = Reserva::findOrFail($id);
+        $salaId = $reserva->sala_id;
+        $reserva->delete();
+
+        return redirect()->route('reservas.create', ['sala' => $salaId])
+            ->with('success', 'Reserva eliminada exitosamente.');
     }
 }

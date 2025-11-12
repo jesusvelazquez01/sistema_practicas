@@ -7,6 +7,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es';
 import type { EventInput, DateSelectArg, EventClickArg } from '@fullcalendar/core';
 import { format, parseISO } from 'date-fns';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -52,6 +53,7 @@ export default function Calendar() {
     const [showCreateDialog, setShowCreateDialog] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<DateSelectArg | null>(null);
     const [formData, setFormData] = useState({
+        sala_id: sala.id.toString(),
         docente_id: '',
         fecha: '',
         hora_entrada: '',
@@ -61,11 +63,26 @@ export default function Calendar() {
 
     const handleDateSelect = (selectInfo: DateSelectArg) => {
         setSelectedEvent(selectInfo);
+        
+        // Extraer fecha y hora correctamente sin problemas de zona horaria
+        const startDate = selectInfo.start;
+        const endDate = selectInfo.end;
+        
+        // Formatear fecha (YYYY-MM-DD)
+        const fecha = startDate.toISOString().split('T')[0];
+        
+        // Formatear hora de entrada (HH:mm)
+        const horaEntrada = startDate.toTimeString().slice(0, 5);
+        
+        // Formatear hora de salida (HH:mm)
+        const horaSalida = endDate.toTimeString().slice(0, 5);
+        
         setFormData({
+            sala_id: sala.id.toString(),
             docente_id: '',
-            fecha: format(selectInfo.start, 'yyyy-MM-dd'),
-            hora_entrada: format(selectInfo.start, 'HH:mm'),
-            hora_salida: format(selectInfo.end, 'HH:mm')
+            fecha: fecha,
+            hora_entrada: horaEntrada,
+            hora_salida: horaSalida
         });
         setShowCreateDialog(true);
     };
@@ -84,11 +101,14 @@ export default function Calendar() {
     const handleCreateReserva = (e: React.FormEvent) => {
         e.preventDefault();
         
-        if (!selectedEvent) return;
+        if (!formData.docente_id) {
+            alert('Por favor seleccione un docente');
+            return;
+        }
 
         const data = {
-            ...formData,
-            sala_id: sala.id,
+            sala_id: parseInt(formData.sala_id),
+            docente_id: parseInt(formData.docente_id),
             fecha: formData.fecha,
             hora_entrada: formData.hora_entrada,
             hora_salida: formData.hora_salida
@@ -97,13 +117,15 @@ export default function Calendar() {
         router.post('/reservas', data, {
             onSuccess: () => {
                 setShowCreateDialog(false);
-                // Recargar el calendario para mostrar la nueva reserva
-                if (calendarRef.current) {
-                    const calendarApi = calendarRef.current.getApi();
-                    calendarApi.refetchEvents();
+                // La página se recargará automáticamente con los nuevos datos
+            },
+            onError: (errors) => {
+                console.error('Error al crear reserva:', errors);
+                if (errors.hora_entrada) {
+                    alert(errors.hora_entrada);
                 }
             },
-            preserveScroll: true
+            preserveScroll: false
         });
     };
 
@@ -150,29 +172,43 @@ export default function Calendar() {
                                         center: 'title',
                                         right: 'dayGridMonth,timeGridWeek,timeGridDay'
                                     }}
-                                    initialView={currentView}
-                                    events={events}
+                                    initialView="timeGridWeek"
+                                    locale={esLocale}
+                                    slotMinTime="08:00:00"
+                                    slotMaxTime="22:00:00"
+                                    slotDuration="00:30:00"
                                     nowIndicator={true}
+                                    allDaySlot={false}
+                                    height="auto"
+                                    events={events}
                                     editable={true}
                                     selectable={true}
                                     selectMirror={true}
+                                    unselectAuto={true}
+                                    unselectCancel="[role='dialog'], [data-radix-dialog-content], [data-radix-popover-content], [data-radix-popover-trigger], .select-trigger, .command-input, .command-item, .command-list, .command-group, button, input, textarea, select"
                                     select={handleDateSelect}
                                     eventClick={handleEventClick}
-                                    locale="es"
                                     buttonText={{
                                         today: 'Hoy',
                                         month: 'Mes',
                                         week: 'Semana',
                                         day: 'Día',
                                     }}
-                                    slotMinTime="08:00:00"
-                                    slotMaxTime="20:00:00"
-                                    allDaySlot={false}
+                                    titleFormat={{
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    }}
+                                    slotLabelFormat={{
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false,
+                                    }}
                                     weekends={true}
                                     eventTimeFormat={{
                                         hour: '2-digit',
                                         minute: '2-digit',
-                                        hour12: true
+                                        hour12: false
                                     }}
                                 />
                                 

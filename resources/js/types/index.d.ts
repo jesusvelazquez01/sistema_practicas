@@ -95,18 +95,43 @@ export interface PaginatedData<T> {
 }
 //Para pasar las props a las o los datatables aca vamos a ir agregando las interfaces que nos falten
 //faltaria docentes, elementos mmm carreras y nose cuales mas
-export interface PageProps{
-    [key:string]: unknown;
+export interface ReservaPorSala {
+    id: number;
+    nombre: string;
+    total_reservas: number;
+}
 
-sala : PaginatedData<Sala>;
-carrera : PaginatedData<Carrera>;
+export interface DocenteConReservas {
+    id: number;
+    nombre: string;
+    apellido: string;
+    total_reservas: number;
+}
+
+export interface StatsProps {
+    total_salas: number;
+    total_reservas: number;
+    total_elementos: number;
+    reservas_por_sala: ReservaPorSala[];
+    docentes_con_reservas: DocenteConReservas[];
+}
+
+export interface PageProps {
+    [key: string]: any; // Firma de índice para compatibilidad con Inertia
+    
+    // Propiedades específicas
+    stats: StatsProps;
+    sala: PaginatedData<Sala>;
+    carrera: PaginatedData<Carrera>;
     salas: number;
     reservas: number;
-    elementos: number; 
-flash: {
-    success: string | null;
-    error: string | null;
-    warning: string | null;
-    info: string | null;
- }
+    elementos: number;
+    reservasporsala: Record<string, number>;
+    docentesConReservas: Record<string, number>;
+    flash: {
+        success: string | null;
+        error: string | null;
+        warning: string | null;
+        info: string | null;
+    }
 }

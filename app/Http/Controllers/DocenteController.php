@@ -11,7 +11,7 @@ class DocenteController extends Controller
 {
     public function index()
     {
-            $docentes = Docente::paginate(10);
+             $docentes = Docente::with(['carrera'])->latest()->paginate(10);
             return Inertia::render('Docentes/Index',[
                 'docentes' => $docentes
             ]);
